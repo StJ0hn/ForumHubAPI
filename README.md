@@ -1,71 +1,50 @@
 # ForumHub API
 
-![Status](https://imgshields.io/badge/status-concluído-brightgreen)
+API RESTful desenvolvida para gerenciamento de tópicos em um fórum de discussões, atuando como desafio backend do programa Oracle Next Education (ONE) via Alura.
 
-## 📖 Sobre o Projeto
+## Objetivo
+O projeto consiste na construção do núcleo de um fórum digital, com foco na consolidação do ecossistema Spring para aplicações corporativas. O objetivo técnico central foi implementar uma arquitetura stateless segura, dominando o ciclo de vida da requisição HTTP, desde a persistência relacional até a interceptação e validação de tokens de acesso.
 
-**ForumHub** é uma API REST desenvolvida como parte do Alura Challenges ONE (Oracle Next Education). O projeto simula o backend de um fórum de discussões, permitindo que usuários criem, leiam, atualizem e deletem tópicos. A API foi construída seguindo os princípios REST e inclui um sistema de autenticação de usuários para proteger os endpoints.
+## Stack Tecnológico
+* Java 17
+* Spring Boot / Spring Data JPA
+* Spring Security / JWT (JSON Web Token)
+* MySQL
+* Flyway (Database Migrations)
+* Maven
 
-Este projeto serviu como um profundo exercício prático para solidificar conceitos de desenvolvimento backend com Java e o ecossistema Spring, incluindo a criação de uma API CRUD completa, gerenciamento de banco de dados com Flyway, validações, e a implementação de segurança com Spring Security e tokens JWT.
+## Arquitetura e Funcionalidades Principais
+A API expõe recursos seguindo os princípios de maturidade REST, garantindo integridade e segurança no tráfego de dados.
+* Autenticação Stateless: Controle de acesso seguro utilizando Spring Security e interceptação de requisições via filtros customizados para validação de tokens JWT.
+* Versionamento de Banco de Dados: Gerenciamento rigoroso de migrações DDL e DML através do Flyway, garantindo rastreabilidade e integridade do esquema relacional no MySQL.
+* Gerenciamento de Tópicos (CRUD): Endpoints para criação, listagem paginada, detalhamento, atualização e deleção de tópicos.
+* Boas Práticas de Design: Implementação de exclusão lógica de registros (soft delete) e validação estrita de dados de entrada na camada de controle (Bean Validation).
 
-## ✨ Funcionalidades da API
+## Endpoints Principais
+* POST `/login` - Autentica as credenciais e devolve o token JWT.
+* POST `/topicos` - Persiste um novo tópico (Requer Autenticação).
+* GET `/topicos` - Retorna a listagem de tópicos ativos com paginação.
+* GET `/topicos/{id}` - Detalha o estado de um tópico específico.
+* PUT `/topicos/{id}` - Atualiza os metadados do tópico (Requer Autenticação).
+* DELETE `/topicos/{id}` - Realiza a exclusão lógica do registro (Requer Autenticação).
 
-A API expõe os seguintes endpoints para a gestão de tópicos:
+## Como Executar Localmente
 
-| Método HTTP | Endpoint | Descrição |
-| --- | --- | --- |
-| `POST` | `/login` | Autentica um usuário e retorna um token JWT. |
-| `POST` | `/topicos` | Cadastra um novo tópico no fórum. |
-| `GET` | `/topicos` | Lista todos os tópicos ativos de forma paginada. |
-| `GET` | `/topicos/{id}` | Detalha um tópico específico pelo seu ID. |
-| `PUT` | `/topicos/{id}` | Atualiza o título e/ou a mensagem de um tópico. |
-| `DELETE` | `/topicos/{id}` | Realiza a exclusão lógica de um tópico. |
+1. Clone o repositório:
+git clone https://github.com/StJ0hn/ForumHubChallengeAlura.git
 
-## 🛠️ Tecnologias Utilizadas
+2. Provisione o banco de dados:
+Crie um schema no MySQL nomeado `forumhub_db`.
 
-As seguintes ferramentas e tecnologias foram usadas na construção do projeto:
-
-- **Java 17+**
-- **Spring Boot**
-- **Spring Data JPA**
-- **MySQL**
-- **Flyway**
-- **Maven**
-- **Lombok**
-- **Spring Security**
-- **JWT (Java Web Token)**
-- **Jackson Databind**
-
-## 🚀 Como Executar o Projeto
-
-**Pré-requisitos:**
-- Java 17 ou superior
-- Maven 3.8 ou superior
-- MySQL Server
-
-**1. Clone o Repositório:**
-```bash
-git clone [URL-DO-SEU-REPOSITORIO-GITHUB]
-cd ForumHub
-```
-**2. Configure o Banco de Dados:**
-
-- Crie um banco de dados no MySQL chamado forumhub_db.
-
-- Abra o arquivo src/main/resources/application.properties.
-
-Altere as seguintes propriedades com suas credenciais do MySQL:
-```
+3. Configure o ambiente:
+No diretório `src/main/resources/`, localize ou crie o arquivo `application.properties` e injete as credenciais da sua instância local:
 spring.datasource.url=jdbc:mysql://localhost:3306/forumhub_db
 spring.datasource.username=seu_usuario
 spring.datasource.password=sua_senha
-```
-**3. Execute a Aplicação:**
 
-Você pode executar a aplicação através da sua IDE ou via linha de comando com o Maven:
-```Bash
-mvn spring-boot:run
-```
-A API iniciará e estará pronta para receber requisições na porta 8080.
-👨‍💻 Autor
-John Miguel Da Silva Fernandes
+4. Compile e execute a aplicação:
+./mvnw spring-boot:run
+(A API inicializará e escutará conexões na porta 8080).
+
+## Desafios Técnicos e Aprendizados
+A estruturação da camada de segurança representou o principal desafio arquitetural. A configuração do Spring Security sem as abstrações depreciadas (como o WebSecurityConfigurerAdapter) forçou um entendimento profundo da cadeia de filtros (SecurityFilterChain) e da gestão de contexto de segurança em aplicações stateless. Além disso, a adoção do Flyway permitiu o abandono das abstrações automáticas do Hibernate (`ddl-auto`), transferindo a responsabilidade do estado do banco de dados para scripts SQL controlados e versionados manualmente, refletindo o rigor esperado em ambientes de produção.
