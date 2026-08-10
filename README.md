@@ -1,50 +1,20 @@
 # ForumHub API
+---
+> RESTful API developed for topics management in a discussion forum, serving as a Back-End challenge of Oracle Next Education (ONE) program via Alura.
+---
+## Technologies
 
-API RESTful desenvolvida para gerenciamento de tópicos em um fórum de discussões, atuando como desafio backend do programa Oracle Next Education (ONE) via Alura.
+![Java](https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
+![Spring Data JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Flyway](https://img.shields.io/badge/Flyway-CC0200?style=for-the-badge&logo=flyway&logoColor=white)
+![JWT (Auth0)](https://img.shields.io/badge/JWT-Auth0_java--jwt-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
+![Lombok](https://img.shields.io/badge/Lombok-BC0000?style=for-the-badge&logo=lombok&logoColor=white)
+![JUnit5](https://img.shields.io/badge/JUnit5-25A162?style=for-the-badge&logo=junit5&logoColor=white)
 
-## Objetivo
-O projeto consiste na construção do núcleo de um fórum digital, com foco na consolidação do ecossistema Spring para aplicações corporativas. O objetivo técnico central foi implementar uma arquitetura stateless segura, dominando o ciclo de vida da requisição HTTP, desde a persistência relacional até a interceptação e validação de tokens de acesso.
+---
 
-## Stack Tecnológico
-* Java 17
-* Spring Boot / Spring Data JPA
-* Spring Security / JWT (JSON Web Token)
-* MySQL
-* Flyway (Database Migrations)
-* Maven
-
-## Arquitetura e Funcionalidades Principais
-A API expõe recursos seguindo os princípios de maturidade REST, garantindo integridade e segurança no tráfego de dados.
-* Autenticação Stateless: Controle de acesso seguro utilizando Spring Security e interceptação de requisições via filtros customizados para validação de tokens JWT.
-* Versionamento de Banco de Dados: Gerenciamento rigoroso de migrações DDL e DML através do Flyway, garantindo rastreabilidade e integridade do esquema relacional no MySQL.
-* Gerenciamento de Tópicos (CRUD): Endpoints para criação, listagem paginada, detalhamento, atualização e deleção de tópicos.
-* Boas Práticas de Design: Implementação de exclusão lógica de registros (soft delete) e validação estrita de dados de entrada na camada de controle (Bean Validation).
-
-## Endpoints Principais
-* POST `/login` - Autentica as credenciais e devolve o token JWT.
-* POST `/topicos` - Persiste um novo tópico (Requer Autenticação).
-* GET `/topicos` - Retorna a listagem de tópicos ativos com paginação.
-* GET `/topicos/{id}` - Detalha o estado de um tópico específico.
-* PUT `/topicos/{id}` - Atualiza os metadados do tópico (Requer Autenticação).
-* DELETE `/topicos/{id}` - Realiza a exclusão lógica do registro (Requer Autenticação).
-
-## Como Executar Localmente
-
-1. Clone o repositório:
-git clone https://github.com/StJ0hn/ForumHubChallengeAlura.git
-
-2. Provisione o banco de dados:
-Crie um schema no MySQL nomeado `forumhub_db`.
-
-3. Configure o ambiente:
-No diretório `src/main/resources/`, localize ou crie o arquivo `application.properties` e injete as credenciais da sua instância local:
-spring.datasource.url=jdbc:mysql://localhost:3306/forumhub_db
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
-
-4. Compile e execute a aplicação:
-./mvnw spring-boot:run
-(A API inicializará e escutará conexões na porta 8080).
-
-## Desafios Técnicos e Aprendizados
-A estruturação da camada de segurança representou o principal desafio arquitetural. A configuração do Spring Security sem as abstrações depreciadas (como o WebSecurityConfigurerAdapter) forçou um entendimento profundo da cadeia de filtros (SecurityFilterChain) e da gestão de contexto de segurança em aplicações stateless. Além disso, a adoção do Flyway permitiu o abandono das abstrações automáticas do Hibernate (`ddl-auto`), transferindo a responsabilidade do estado do banco de dados para scripts SQL controlados e versionados manualmente, refletindo o rigor esperado em ambientes de produção.
