@@ -18,3 +18,23 @@
 
 ---
 
+## Overview
+
+> Originally built as an Oracle Next Education (ONE) / Alura backend challenge, this project is currently undergoing a professional refactoring process.
+
+- **Problem to be solved:** create an application to centralize discussion around topics opened by users.
+- **Solution:** develop a RESTful API with AuthN and AuthZ services.
+- **Conclusion:** implementing a RESTful API to manage a forum with AuthN and AuthZ is not just about writing code, it required a sequence of deliberate decisions, such as architecture, problem domain modeling, and technology choices. Working under a tight deadline was one of the biggest challenges of the original assignment.
+
+---
+## Features
+
+- [x] JWT-based login (authentication only — see note below)
+- [x] Topic creation, listing and update
+- [ ] Topic deletion (soft-delete field exists on the entity but is not yet wired to any endpoint)
+- [ ] Paginated topic listing (currently returns the full list)
+- [ ] Route-level authorization (all endpoints are currently public — `permitAll()`)
+- [ ] Automated test suite (characterization tests, then behavior-driven tests post-refactor)
+- [ ] Architectural refactoring guided by Martin Fowler's *Refactoring*
+- [ ] React frontend consuming the API
+- [ ] CI/CD pipeline (GitHub Actions) and cloud deployment
