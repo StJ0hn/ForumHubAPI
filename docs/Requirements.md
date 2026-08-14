@@ -1,7 +1,8 @@
 # Requirements
 
 ## Problem
-[Descreva o problema que o sistema pretende resolver.]
+Create an application to centralize discussion around topics opened by users.
+Resolution of challenge of ONE program.
 
 ## Objective
 [Descreva o objetivo principal do sistema.]
