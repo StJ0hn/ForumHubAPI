@@ -1,6 +1,5 @@
 package com.forumhub.forumhub;
 
-import com.forumhub.forumhub.principal.Principal;
 import com.forumhub.forumhub.repository.CursoRepository;
 import com.forumhub.forumhub.repository.TopicoRepository;
 import com.forumhub.forumhub.repository.UsuarioRepository;
