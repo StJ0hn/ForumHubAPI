@@ -11,12 +11,12 @@
 - [x] CLI órfã (`principal/`) removida
 
 ### 2. Requirements
-- [ ] Mapear no `Requirements.md` o que o sistema faz hoje: Problem, Objective, Scope, Actors, RFs, RNFs, Business Rules
-- [ ] Adicionar RFs identificados: deleção lógica de tópico, listagem paginada
+- [x] Mapear no `Requirements.md` o que o sistema faz hoje: Problem, Objective, Scope, Actors, RFs, RNFs, Business Rules
+- [x] Adicionar RFs identificados: deleção lógica de tópico, listagem paginada
 
 ### 3. Characterization tests
 - [ ] `test/login-characterization` — `POST /login`
-- [ ] `test/topics-list-characterization` — `GET /topicos`
+- [x] `test/topics-list-characterization` — `GET /topicos`
 - [ ] `test/topic-detail-characterization` — `GET /topicos/{id}`
 - [ ] `test/topic-create-characterization` — `POST /topicos`
 - [ ] `test/topic-update-characterization` — `PUT /topicos`
