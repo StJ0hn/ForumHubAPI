@@ -46,11 +46,22 @@
      Preencher a coluna "Resolution" conforme forem endereçados na Sprint 2. -->
 
 ### Orphaned Service layer
-`TopicoService.listarTodos()` já implementa a lógica correta de filtragem (soft delete via
-`findAllByStatusTrue()`), mas `TopicoController` chama `TopicoRepository` diretamente na maioria
-dos endpoints, ignorando essa camada. Apenas `detalhar()` passa pelo Service.
+`TopicoService` has two methods — `listarTodos()` (correct soft-delete filtering via
+`findAllByStatusTrue()`) and `detalharTopico(Long id)` — but no endpoint calls either one.
+`TopicoController` calls `TopicoRepository` directly in all endpoints, ignoring the
+Service layer entirely.
 
-**Resolution:** [a definir na Sprint 2]
+**Resolution:** [to be defined in Sprint 2]
+
+### Listing ignores soft delete
+`GET /topicos` uses `TopicoRepository.findAll()` and returns topics with `status = false`
+(soft-deleted) alongside active ones. Proven by characterization test
+(`TopicoControllerTest.listarDeveRetornarTopicosComStatusFalsos`): a topic seeded with
+`status = false` appears in the listing. The correct filter already exists in
+`TopicoService.listarTodos()` (`findAllByStatusTrue()`), which is never called
+(see "Orphaned Service layer").
+
+**Resolution:** [to be defined in Sprint 2]
 
 ### Legacy CLI entry point
 Existe uma tentativa antiga de interface de linha de comando (`principal/`), sem propósito
