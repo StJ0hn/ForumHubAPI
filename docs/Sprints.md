@@ -17,7 +17,7 @@
 ### 3. Characterization tests
 - [ ] `test/login-characterization` — `POST /login`
 - [x] `test/topics-list-characterization` — `GET /topicos`
-- [ ] `test/topic-detail-characterization` — `GET /topicos/{id}`
+- [x] `test/topic-detail-characterization` — `GET /topicos/{id}`
 - [ ] `test/topic-create-characterization` — `POST /topicos`
 - [ ] `test/topic-update-characterization` — `PUT /topicos`
 - [ ] `test/authz-gap-proof` — provar que `permitAll()` libera tudo hoje
