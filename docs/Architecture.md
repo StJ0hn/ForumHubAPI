@@ -64,7 +64,16 @@ Service layer entirely.
 **Resolution:** [to be defined in Sprint 2]
 
 ### Legacy CLI entry point
-Existe uma tentativa antiga de interface de linha de comando (`principal/`), sem propósito
-funcional numa API REST. Resquício de uma fase inicial do projeto.
+There is a legacy command-line interface attempt (`principal/`) that serves no functional purpose in a REST API. 
+It is a remnant of an early phase of the project.
 
-**Resolution:** [a definir — remover ou isolar antes da Sprint 1]
+**Resolution: remove `principal/` and  `Principal` class
+
+### Detail endpoint returns internal error for non-existent ID
+`GET /topicos/{id}` with a non-existent ID returns HTTP 500 instead of 404.
+`getReferenceById()` returns a lazy proxy that throws `EntityNotFoundException`
+when the DTO reads its fields, and no error handler exists to translate it
+into a proper response. Proven by characterization test
+(`detalharPorIdInexistenteDeveLancarEntityNotFoundException`) and confirmed
+on the running server via Postman.
+**Resolution:** [to be defined in Sprint 2]

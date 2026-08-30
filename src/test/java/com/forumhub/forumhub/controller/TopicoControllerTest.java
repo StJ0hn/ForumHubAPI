@@ -6,6 +6,8 @@ import com.forumhub.forumhub.model.Usuario;
 import com.forumhub.forumhub.repository.CursoRepository;
 import com.forumhub.forumhub.repository.TopicoRepository;
 import com.forumhub.forumhub.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -32,6 +35,7 @@ class TopicoControllerTest {
     @Autowired private TopicoRepository topicoRepository;
     @Autowired
     private CursoRepository cursoRepository;
+    private Topico topicoAtivo;
 
     @BeforeEach
     void cenario(){
@@ -53,8 +57,10 @@ class TopicoControllerTest {
         deletado.setCurso(curso);
         deletado.setStatus(false);
         topicoRepository.save(deletado);
-    }
 
+        topicoAtivo = topicoRepository.save(ativo);
+    }
+    //endpoint GET "/topicos"
     @Test
     void listarDeveRetornarTodosOsTopicos() throws Exception{
         //ACT
@@ -71,6 +77,28 @@ class TopicoControllerTest {
         //ASSERT
         resposta.andExpect(status().isOk())
                 .andExpect(jsonPath("$[?(@.status == false)].titulo", hasItem("topico deletado")));
+    }
+
+    //endpoint GET "/topicos/{id}"
+    @Test
+    void detalharPorIdExistenteDeveRetornarTopicoDoIdSolicitado() throws Exception{
+        //ACT
+        ResultActions resposta = mockMvc.perform(get("/topicos/{id}", topicoAtivo.getId()));
+        //ASSERT
+        resposta.andExpect(status().isOk())
+                .andExpect(jsonPath("$.titulo", is("topico ativo")))
+                .andExpect(jsonPath("$.mensagem", is("mensagem de ativo")))
+                .andExpect(jsonPath("$.autor", is("Aprendiz")))
+                .andExpect(jsonPath("$.curso", is("Spring Boot")))
+                .andExpect(jsonPath("$.status", is(true)));
+    }
+
+    @Test
+    void detalharPorIdInexistenteDeveLancarEntityNotFoundException() throws Exception{
+        //ACT
+        ServletException excecao = assertThrows(ServletException.class, () -> mockMvc.perform(get("/topicos/999999")));
+        //ASSERT
+        assertTrue(excecao.getCause() instanceof EntityNotFoundException);
     }
 }
 
