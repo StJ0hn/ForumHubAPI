@@ -77,3 +77,13 @@ into a proper response. Proven by characterization test
 (`detalharPorIdInexistenteDeveLancarEntityNotFoundException`) and confirmed
 on the running server via Postman.
 **Resolution:** [to be defined in Sprint 2]
+
+### Create endpoint returns internal error for non-existent references
+`POST /topicos` with a non-existent `autorId` in the body returns HTTP 500
+instead of a proper 4xx client error. `getReferenceById()` returns a lazy
+proxy without touching the database, so the invalid reference is only
+rejected at INSERT time by the `topicos` foreign key — the resulting
+`DataIntegrityViolationException` is unhandled (no error handler).
+Proven by characterization test (`cadastrarComAutorIdInexistente...`) and
+confirmed on the running server via Postman.
+**Resolution:** [to be defined in Sprint 2]
