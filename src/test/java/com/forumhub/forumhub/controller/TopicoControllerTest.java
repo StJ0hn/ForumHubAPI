@@ -13,18 +13,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,9 +36,16 @@ class TopicoControllerTest {
     @Autowired
     private CursoRepository cursoRepository;
     private Topico topicoAtivo;
+    private Usuario autorSalvo;
+    private Curso cursoSalvo;
 
     @BeforeEach
     void cenario(){
+        //LIMPEZA
+        topicoRepository.deleteAllInBatch();
+        cursoRepository.deleteAllInBatch();
+        usuarioRepository.deleteAllInBatch();
+
         //ARRANGE
         Usuario autor = usuarioRepository.save(new Usuario(null, "Aprendiz", "aprendiz@test.com", "senha"));
         Curso curso = cursoRepository.save(new Curso(null, "Spring Boot", "Backend"));
@@ -48,7 +55,6 @@ class TopicoControllerTest {
         ativo.setMensagem("mensagem de ativo");
         ativo.setAutor(autor);
         ativo.setCurso(curso);
-        topicoRepository.save(ativo);
 
         Topico deletado = new Topico();
         deletado.setTitulo("topico deletado");
@@ -57,8 +63,14 @@ class TopicoControllerTest {
         deletado.setCurso(curso);
         deletado.setStatus(false);
         topicoRepository.save(deletado);
-
         topicoAtivo = topicoRepository.save(ativo);
+
+        Usuario autor2 = new Usuario(null, "joana", "lalala@gmail.com", "nada");
+        Curso curso2 = new Curso(null, "Banco de dados", "Backend");
+        this.autorSalvo = autor2;
+        this.cursoSalvo = curso2;
+        usuarioRepository.save(autorSalvo);
+        cursoRepository.save(cursoSalvo);
     }
     //endpoint GET "/topicos"
     @Test
@@ -94,11 +106,72 @@ class TopicoControllerTest {
     }
 
     @Test
-    void detalharPorIdInexistenteDeveLancarEntityNotFoundException() throws Exception{
+    void detalharPorIdInexistenteDeveLancarEntityNotFoundException(){
         //ACT
         ServletException excecao = assertThrows(ServletException.class, () -> mockMvc.perform(get("/topicos/999999")));
         //ASSERT
         assertTrue(excecao.getCause() instanceof EntityNotFoundException);
+    }
+
+    //endpoint POST "/topicos"
+    @Test
+    void cadastrarTopicoDeveRetornarOk() throws Exception{
+        //ARRANGE
+        String json = """
+                {
+                    "titulo": "topico de teste",
+                    "mensagem": "mensagem de teste",
+                    "autorId": %d,
+                    "cursoId": %d
+                }
+                """.formatted(autorSalvo.getId(), cursoSalvo.getId());
+        //ACT
+        ResultActions resposta = mockMvc.perform(post("/topicos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+        //ASSERT
+        resposta.andExpect(status().isOk())
+                .andExpect(content().string(""));
+        assertEquals(3, topicoRepository.count()); //Verificar se há 3 tópicos, 2 do ARRANGE no cenario() + 1 do POST
+    }
+
+    @Test
+    void cadastrarTopicoDeveRetornarBadRequest() throws Exception {
+        //ARRANGE
+        String json = """
+                {
+                    "mensagem": "mensagem teste",
+                    "autorId": %d,
+                    "cursoId": %d
+                }
+                """.formatted(autorSalvo.getId(), cursoSalvo.getId());
+        //ACT
+        ResultActions resposta = mockMvc.perform(post("/topicos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+        //ASSERT
+        resposta.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void cadastrarComAutorIdInexistenteDeveLancarDataIntegrityViolationException(){
+        //ASSERT
+        String json = """
+                {
+                    "titulo": "titulo teste",
+                    "mensagem": "mensagem teste",
+                    "autorId": %d,
+                    "cursoId": %d
+                }
+                """.formatted(999999, cursoSalvo.getId());
+
+        //ACT
+        ServletException excecao = assertThrows(ServletException.class,
+                () -> mockMvc.perform(post("/topicos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)));
+        //ASSERT
+        assertTrue(excecao.getCause() instanceof DataIntegrityViolationException);
     }
 }
 
