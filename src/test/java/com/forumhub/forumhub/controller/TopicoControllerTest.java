@@ -22,8 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -155,7 +154,7 @@ class TopicoControllerTest {
 
     @Test
     void cadastrarComAutorIdInexistenteDeveLancarDataIntegrityViolationException(){
-        //ASSERT
+        //ARRANGE
         String json = """
                 {
                     "titulo": "titulo teste",
@@ -172,6 +171,49 @@ class TopicoControllerTest {
                         .content(json)));
         //ASSERT
         assertTrue(excecao.getCause() instanceof DataIntegrityViolationException);
+    }
+
+    //endpoint PUT "/topics"
+    @Test
+    void atualizarTopicoExistenteDeveRetornarOkETopicoAtualizado() throws Exception{
+        //ARRANGE
+        String jsonRequest = """
+                {
+                    "id": "%d",
+                    "titulo": "Atualizacao teste",
+                    "mensagem": "mensagem atualizacao teste"
+                }
+                """.formatted(topicoAtivo.getId());
+        Topico atualizado = topicoRepository.findById(topicoAtivo.getId()).orElseThrow();
+        //ACT
+        ResultActions resposta = mockMvc.perform(put("/topicos").contentType(MediaType.APPLICATION_JSON).content(jsonRequest));
+        //ASSERT
+        resposta.andExpect(status().isOk())
+                .andExpect(jsonPath("$.titulo", is("Atualizacao teste")))
+                .andExpect(jsonPath("$.mensagem", is("mensagem atualizacao teste")))
+                .andExpect(jsonPath("$.autor", is("Aprendiz")));
+        assertEquals("Atualizacao teste", atualizado.getTitulo());
+    }
+
+    @Test
+    void atualizarTopicoComIdInexistenteDeveRetornarEntityNotFound(){
+        //ARRANGE
+        String json = """
+                {
+                    "id": %d,
+                    "titulo": "titulo teste atulizar",
+                    "mensagem": "mensagem teste atualizar"Ver
+                }
+                """.formatted(999999);
+
+        //ACT
+        ServletException excecao = assertThrows(ServletException.class,
+                () -> mockMvc.perform(put("/topicos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)));
+
+        //ASSERT
+        assertTrue(excecao.getCause() instanceof EntityNotFoundException);
     }
 }
 
