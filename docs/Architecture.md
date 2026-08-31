@@ -87,3 +87,20 @@ rejected at INSERT time by the `topicos` foreign key — the resulting
 Proven by characterization test (`cadastrarComAutorIdInexistente...`) and
 confirmed on the running server via Postman.
 **Resolution:** [to be defined in Sprint 2]
+
+### Update endpoint allows modification without ownership validation
+`PUT /topicos` updates any existing topic with no authentication and no
+ownership check - any caller can modify any topic. The characterization
+tests for this endpoint run without a token and succeed (see Threat
+Model T01). A dedicated authz-gap proof covering all routes is planned
+(Sprints.md, item 3).
+**Resolution:** [to be defined in Sprint 2 — AuthZ]
+
+### Update endpoint returns internal error for non-existent ID
+`PUT /topicos` with a non-existent `id` behaves like the detail endpoint:
+`getReferenceById()` returns a lazy proxy and `atualizarInformacoes()`
+triggers `EntityNotFoundException` when touching it - unhandled
+(HTTP 500 in production). Third occurrence of the `getReferenceById`
+family: detail (proxy exception), create (FK constraint), update
+(proxy exception again).
+**Resolution:** [to be defined in Sprint 2]
