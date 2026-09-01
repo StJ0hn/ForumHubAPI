@@ -20,7 +20,7 @@
 - [x] `test/topic-detail-characterization` — `GET /topicos/{id}`
 - [x] `test/topic-create-characterization` — `POST /topicos`
 - [x] `test/topic-update-characterization` — `PUT /topicos`
-- [ ] `test/authz-gap-proof` — provar que `permitAll()` libera tudo hoje
+- [x] `test/authz-gap-proof` — provar que `permitAll()` libera tudo hoje
 
 ### 4. Threat Model
 - [ ] Preencher `ThreatModel.md`: Security Objective, Assets, Entry Points, Trust Boundaries
