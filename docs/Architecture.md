@@ -104,3 +104,15 @@ triggers `EntityNotFoundException` when touching it - unhandled
 family: detail (proxy exception), create (FK constraint), update
 (proxy exception again).
 **Resolution:** [to be defined in Sprint 2]
+
+### Login endpoint is inoperable (StackOverflowError)
+`POST /login` throws `StackOverflowError` for any credentials — valid,
+invalid, or non-existent user. The `AuthenticationManager` bean exposed
+by `SecurityConfigurations` (via
+`AuthenticationConfiguration.getAuthenticationManager()`) delegates the
+`authenticate()` call to itself: an AOP proxy re-entering its own
+method in an infinite loop. Reproduced on two independent surfaces:
+MockMvc (characterization test) and the real running server
+(HTTP 500, verified via curl). The README describes login as a
+working feature.
+**Resolution:** [to be defined in Sprint 2 — authentication will be rebuilt]
