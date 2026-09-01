@@ -15,7 +15,7 @@
 - [x] Adicionar RFs identificados: deleção lógica de tópico, listagem paginada
 
 ### 3. Characterization tests
-- [ ] `test/login-characterization` — `POST /login`
+- [x] `test/login-characterization` — `POST /login`
 - [x] `test/topics-list-characterization` — `GET /topicos`
 - [x] `test/topic-detail-characterization` — `GET /topicos/{id}`
 - [x] `test/topic-create-characterization` — `POST /topicos`
