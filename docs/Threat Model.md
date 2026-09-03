@@ -57,7 +57,7 @@ Three complementary measures:
    thereby invalidating the exposed ones.
 2. **Secrets excluded from version control:** `application.properties` is updated
    to reference environment variables (`api.security.token.secret=${JWT_SECRET}`,
-   `spring.datasource.password=${DB_PASSWORD}`); the actual values ​​reside only
+   `spring.datasource.password=${DB_PASSWORD}`); the actual values reside only
    in the local/deployment environment, with the variables file kept outside
    the repository and ignored via `.gitignore`.
 3. **Residual risk:** anyone who cloned the repository prior to the rotation
