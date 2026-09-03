@@ -25,14 +25,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @AutoConfigureMockMvc
 @Transactional
 public class AutenticacaoControllerTest {
-    @Autowired private MockMvc mockMvc;
-    @Autowired private UsuarioRepository usuarioRepository;
-    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     public Usuario usuario;
 
     @BeforeEach
-    void cenario(){
-        //LIMPEZA
+    void cenario() {
+        // LIMPEZA
         usuarioRepository.deleteAllInBatch();
 
         Usuario usuarioExistente = new Usuario(null, "joana", "lalala@gmail.com", passwordEncoder.encode("lalala"));
@@ -41,21 +44,21 @@ public class AutenticacaoControllerTest {
     }
 
     @Test
-    void autenticacaoDeveLancarStackOverflowError(){
-        //ARRANGE
+    void autenticacaoDeveLancarStackOverflowError() {
+        // ARRANGE
         String json = """
                 {
                     "email": "lalala@gmail.com",
                     "senha": "lalala"
                 }
                 """;
-        //ACT
+        // ACT
         ServletException excecao = assertThrows(ServletException.class,
                 () -> mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)));
 
-        //ASSERT
+        // ASSERT
         assertTrue(excecao.getCause() instanceof StackOverflowError);
     }
 }
