@@ -1,4 +1,4 @@
-package com.forumhub.forumhub.infra.security;
+package com.forumhub.forumhub.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -22,13 +22,23 @@ public class TokenService {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("API ForumHub")
-                    .withSubject(usuario.getEmail()) // Ou getEmail(), dependendo do seu modelo
+                    .withSubject(usuario.getEmail())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
         } catch (JWTCreationException exception){
             throw new RuntimeException("Erro ao gerar token jwt", exception);
         }
     }
+
+    public String validarToken(String token) {
+        var algoritmo = Algorithm.HMAC256(secret);
+        return JWT.require(algoritmo)
+                .withIssuer("API ForumHub")
+                .build()
+                .verify(token)
+                .getSubject();
+    }
+
 
     private Instant dataExpiracao() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));

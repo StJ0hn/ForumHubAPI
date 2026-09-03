@@ -2,7 +2,7 @@ package com.forumhub.forumhub.controller;
 
 import com.forumhub.forumhub.dto.DadosAutenticacao;
 import com.forumhub.forumhub.dto.DadosTokenJWT;
-import com.forumhub.forumhub.infra.security.TokenService;
+import com.forumhub.forumhub.service.TokenService;
 import com.forumhub.forumhub.model.Usuario;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

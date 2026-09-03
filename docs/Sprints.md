@@ -23,12 +23,12 @@
 - [x] `test/authz-gap-proof` — provar que `permitAll()` libera tudo hoje
 
 ### 4. Threat Model
-- [ ] Preencher `ThreatModel.md`: Security Objective, Assets, Entry Points, Trust Boundaries
-- [ ] Escrever Mitigation de T01 (AuthZ ausente) e T02 (JWT secret exposto)
+- [x] Preencher `ThreatModel.md`: Security Objective, Assets, Entry Points, Trust Boundaries
+- [x] Escrever Mitigation de T01 (AuthZ ausente) e T02 (JWT secret exposto)
 
 ### 5. Architecture
-- [ ] Preencher `Architecture.md`: Overview, Style, Components, Data Flow (estado alvo)
-- [ ] Confirmar Known Deviations (Service órfão — já mapeado)
+- [x] Preencher `Architecture.md`: Overview, Style, Components, Data Flow (estado alvo)
+- [x] Confirmar Known Deviations (Service órfão — já mapeado)
 
 ### 6. Fechar Sprint 1
 - [ ] Revisar os 4 documentos juntos, checar contradição entre eles
