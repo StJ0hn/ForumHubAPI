@@ -31,16 +31,16 @@
 - [x] Confirmar Known Deviations (Service órfão — já mapeado)
 
 ### 6. Fechar Sprint 1
-- [ ] Revisar os 4 documentos juntos, checar contradição entre eles
-- [ ] Atualizar README se algo mudou
+- [x] Revisar os 4 documentos juntos, checar contradição entre eles
+- [x] Atualizar README se algo mudou
 
 ---
 
 ## Sprint 2 — Refactoring (Fowler)
 
-- [ ] Corrigir Service órfão
-- [ ] Implementar AuthZ real (resolve T01)
-- [ ] Mover JWT secret e credenciais para variável de ambiente (resolve T02)
+- [x] Corrigir Service órfão
+- [x] Implementar AuthZ real (resolve T01)
+- [x] Mover JWT secret e credenciais para variável de ambiente (resolve T02)
 - [ ] Implementar DELETE (soft delete)
 - [ ] Implementar paginação
 - [ ] Traduzir aplicação para inglês (rotas, DTOs, entidades, métodos)
